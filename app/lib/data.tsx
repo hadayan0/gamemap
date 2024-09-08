@@ -1,6 +1,6 @@
 import { sql } from '@vercel/postgres';
 
-let icontypeMap = {};
+const icontypeMap = {};
 
 export async function getIcontypeFromCache(id: string) {
   if (!icontypeMap[id]) {

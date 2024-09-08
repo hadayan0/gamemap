@@ -7,7 +7,7 @@ function IconGrid({
 }: {
   x: number, y: number, size: number
 }) {
-  let icons = [];
+  const icons = [];
   for (let i = 0; i < size ** 2; i++) {
     const dx = i % size * 2;
     const dy = Math.floor(i / size) * 2;
@@ -26,7 +26,7 @@ function IconGrid({
 async function buildMarkerElements() {
   const markers = await fetchMarkers();
   // console.log(markers);
-  let markerElements = markers.map((marker) => {
+  const markerElements = markers.map((marker) => {
     return (
       <Marker
         key={marker.id}
@@ -59,7 +59,7 @@ export default async function Page() {
       >
         <div
         >
-          <img
+          <Image
             src="/アデルカ渓谷.png"
             alt="アデルカ渓谷"
             width={800}
