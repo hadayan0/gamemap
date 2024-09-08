@@ -1,5 +1,6 @@
 import Image from "next/image";
-import { fetchIcontype } from "@/app/lib/data";
+// import { fetchIcontype } from "@/app/lib/data";
+import { getIcontypeFromCache } from "@/app/lib/data";
 
 const textBoxWidth = 150;
 const textBoxHeight = 60;
@@ -22,7 +23,8 @@ async function Icon({
 }: {
   icontype: string,
 }) {
-  const row = await fetchIcontype(icontype);
+  // const row = await fetchIcontype(icontype);
+  const row = await getIcontypeFromCache(icontype);
   if (row === null) {
     return <UndefinedIcon />;
   }

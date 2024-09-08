@@ -53,8 +53,8 @@ export default async function Page() {
           borderColor: "blue",
           borderStyle: "double",
           overflow: "hidden",
-          width: 800,
-          height: 1046,
+          width: 800+6,
+          height: 1046+6,
         }}
       >
         <div
@@ -71,10 +71,10 @@ export default async function Page() {
               width: 800,
               height: 1046,
             }}
-            priority={true}
+            priority="true"
           />
         </div>
-        <IconGrid x={58} y={70} size={20} />
+        <IconGrid x={0} y={0} size={100} />
         {markers}
       </div>
     </>

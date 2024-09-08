@@ -1,5 +1,14 @@
 import { sql } from '@vercel/postgres';
 
+let icontypeMap = {};
+
+export async function getIcontypeFromCache(id: string) {
+  if (!icontypeMap[id]) {
+    icontypeMap[id] = fetchIcontype(id);
+  }
+  return icontypeMap[id];
+}
+
 export async function fetchIcontype(id: string) {
   try {
     // console.log(`fetching... id=${id}`);
@@ -8,7 +17,7 @@ export async function fetchIcontype(id: string) {
       FROM icontype
       WHERE id=${id}
     `;
-    // console.log("fetched.");
+    console.log(`fetched icontype id=${id}`);
     if (data.rowCount === 0) {
       return null;
     }
@@ -28,8 +37,8 @@ export async function fetchMarkers() {
     `;
     // console.log("fetched");
     const markers = data.rows.map((marker) => ({
-     ...marker,
-     position: _getPositionString(marker.textposition),
+      ...marker,
+      position: _getPositionString(marker.textposition),
     }));
     return markers;
   } catch (error) {
