@@ -1,20 +1,21 @@
 import Image from "next/image";
-import MapIcon from "@/app/ui/icon";
+import Marker from "@/app/ui/marker";
+import { fetchMarkers } from "../lib/data";
 
-function Icon9x9({
-  x, y
+function IconGrid({
+  x, y, size
 }: {
-  x: number, y: number
+  x: number, y: number, size: number
 }) {
   let icons = [];
-  for (let i = 0; i < 9; i++) {
-    const dx = i % 3 * 2;
-    const dy = Math.floor(i / 3) * 2;
+  for (let i = 0; i < size ** 2; i++) {
+    const dx = i % size * 2;
+    const dy = Math.floor(i / size) * 2;
     icons.push(
-      <MapIcon
+      <Marker
         posX={x + dx}
         posY={y + dy}
-        icontype="94d32272-a7da-4f3d-9950-b444b53b48b9"
+        icontype="8405db89-3b12-4033-889f-29b65df1e036"
       />
     );
   }
@@ -22,12 +23,29 @@ function Icon9x9({
   return icons;
 }
 
-export default function Page() {
+async function buildMarkerElements() {
+  const markers = await fetchMarkers();
+  // console.log(markers);
+  let markerElements = markers.map((marker) => {
+    return (
+      <Marker
+        key={marker.id}
+        posX={marker.posx}
+        posY={marker.posy}
+        icontype={marker.icontype}
+        text={marker.text}
+        textPosition={marker.position}
+        note={marker.note}
+      />
+    );
+  });
+  return markerElements;
+}
+
+export default async function Page() {
+  const markers = await buildMarkerElements();
   return (
     <>
-      <p>
-        Hello, world!
-      </p>
       <div
         className="relative"
         style={{
@@ -35,40 +53,29 @@ export default function Page() {
           borderColor: "blue",
           borderStyle: "double",
           overflow: "hidden",
-          width: 916,
-          height: 997,
+          width: 800,
+          height: 1046,
         }}
       >
         <div
         >
-          <Image
-            src="/lake_2.png"
-            alt="リタニアム地底湖 地下２階"
-            width={916}
-            height={997}
+          <img
+            src="/アデルカ渓谷.png"
+            alt="アデルカ渓谷"
+            width={800}
+            height={1046}
             style={{
               position: "absolute",
-              top: -49,
-              left: -103,
+              top: -2,
+              left: -11,
+              width: 800,
+              height: 1046,
             }}
+            priority={true}
           />
         </div>
-        <MapIcon
-          posX={42}
-          posY={28}
-          icontype="959c1fb8-7654-4c6b-9bb1-de8d971051ec"
-        />
-        <MapIcon
-          posX={44}
-          posY={28}
-          icontype="cabc4141-fe0f-4f83-adc0-04c0a5993246"
-        />
-        <MapIcon
-          posX={46}
-          posY={28}
-          icontype="e2782382-f3c7-410a-9499-0aa33101e44f"
-        />
-        <Icon9x9 x={42} y={20} />
+        <IconGrid x={58} y={70} size={20} />
+        {markers}
       </div>
     </>
   );
