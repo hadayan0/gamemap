@@ -30,16 +30,16 @@ async function Icon({
   }
   return (
     <Image
-      src={row[0].url}
-      alt={row[0].alt}
-      width={row[0].width}
-      height={row[0].height}
+      src={row.url}
+      alt={row.alt}
+      width={row.width}
+      height={row.height}
       style={{
         position: "absolute",
-        top: -row[0].width / 2,
-        left: -row[0].height / 2,
-        maxWidth: row[0].width,
-        maxHeight: row[0].height,
+        top: -row.width / 2,
+        left: -row.height / 2,
+        maxWidth: row.width,
+        maxHeight: row.height,
       }}
     />
   );
@@ -56,7 +56,7 @@ export default function Marker({
   textPosition: string,
   note: string,
 }) {
-  const baseStyle = {
+  const baseStyle: React.CSSProperties = {
     display: (text) ? "table-cell" : "none",
     width: textBoxWidth,
     height: textBoxHeight,
@@ -65,6 +65,7 @@ export default function Marker({
     fontSize: 13
   };
   const positionStyle = _getPositionStyle(textPosition);
+  const textBoxStyle: React.CSSProperties = {...baseStyle, ...positionStyle}
   return (
     <div
       style={{
@@ -75,15 +76,15 @@ export default function Marker({
       title={note}
     >
       <Icon icontype={icontype} />
-      <div style={{ ...baseStyle, ...positionStyle }} >
+      <div style={textBoxStyle} >
         {text}
       </div>
     </div>
   );
 
-  function _getPositionStyle(textPosition: string) {
+  function _getPositionStyle(textPosition: string): React.CSSProperties {
     const offset = 7;
-    let positionStyle;
+    let positionStyle: React.CSSProperties;
     switch (textPosition) {
       case "west":
         positionStyle = {

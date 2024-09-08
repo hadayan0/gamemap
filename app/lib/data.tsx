@@ -1,6 +1,9 @@
 import { sql } from '@vercel/postgres';
 
-const icontypeMap = {};
+interface IcontypeMap {
+  [key: string]: Promise<Icontype>;
+}
+const icontypeMap: IcontypeMap = {};
 
 export async function getIcontypeFromCache(id: string) {
   if (!icontypeMap[id]) {
@@ -9,7 +12,14 @@ export async function getIcontypeFromCache(id: string) {
   return icontypeMap[id];
 }
 
-export async function fetchIcontype(id: string) {
+type Icontype = {
+  url: string;
+  alt: string;
+  width: number;
+  height: number;
+}
+
+export async function fetchIcontype(id: string): Promise<Icontype> {
   try {
     // console.log(`fetching... id=${id}`);
     const data = await sql`
@@ -19,16 +29,27 @@ export async function fetchIcontype(id: string) {
     `;
     console.log(`fetched icontype id=${id}`);
     if (data.rowCount === 0) {
-      return null;
+      // return null;
+      throw new Error('Icontype not found.');
     }
-    return data.rows;
+    return data.rows[0] as Icontype;
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Database Error:');
   }
 }
 
-export async function fetchMarkers() {
+type Marker = {
+  id: string;
+  icontype: string;
+  posx: number;
+  posy: number;
+  text: string;
+  note: string;
+  textposition: number;
+  position: 'east' | 'west' | 'south' | 'north';
+}
+export async function fetchMarkers(): Promise<Marker[]> {
   try {
     // console.log("fetching...");
     const data = await sql`
@@ -40,7 +61,7 @@ export async function fetchMarkers() {
       ...marker,
       position: _getPositionString(marker.textposition),
     }));
-    return markers;
+    return markers as Marker[];
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Database Error:');

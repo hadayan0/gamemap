@@ -13,9 +13,13 @@ function IconGrid({
     const dy = Math.floor(i / size) * 2;
     icons.push(
       <Marker
+        key={"grid"+i}
         posX={x + dx}
         posY={y + dy}
         icontype="8405db89-3b12-4033-889f-29b65df1e036"
+        text={""}
+        textPosition="north"
+        note={""}
       />
     );
   }
@@ -71,7 +75,7 @@ export default async function Page() {
               width: 800,
               height: 1046,
             }}
-            priority="true"
+            priority={true}
           />
         </div>
         <IconGrid x={0} y={0} size={100} />
