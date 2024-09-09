@@ -2,29 +2,23 @@ import Image from "next/image";
 import Marker from "@/app/ui/marker";
 import { fetchMarkers } from "../lib/data";
 
-function IconGrid({
-  x, y, size
+function Grid({
+  x, y
 }: {
-  x: number, y: number, size: number
+  x: number, y: number
 }) {
-  const icons = [];
-  for (let i = 0; i < size ** 2; i++) {
-    const dx = i % size * 2;
-    const dy = Math.floor(i / size) * 2;
-    icons.push(
-      <Marker
-        key={"grid"+i}
-        posX={x + dx}
-        posY={y + dy}
-        icontype="8405db89-3b12-4033-889f-29b65df1e036"
-        text={""}
-        textPosition="north"
-        note={""}
-      />
-    );
-  }
-
-  return icons;
+  return (
+    <div
+      style={{
+        position:"absolute",
+        left: 0,
+        top: 0,
+        width: x,
+        height: y,
+        backgroundImage: "URL('/grid.png')",
+      }}
+    />
+  )
 }
 
 async function buildMarkerElements() {
@@ -78,7 +72,7 @@ export default async function Page() {
             priority={true}
           />
         </div>
-        <IconGrid x={0} y={0} size={100} />
+        <Grid x={800} y={1046} />
         {markers}
       </div>
     </>
