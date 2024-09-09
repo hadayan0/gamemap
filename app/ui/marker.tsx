@@ -1,5 +1,4 @@
 import Image from "next/image";
-// import { fetchIcontype } from "@/app/lib/data";
 import { getIcontypeFromCache } from "@/app/lib/data";
 
 const textBoxWidth = 150;
@@ -47,8 +46,10 @@ async function Icon({
 
 
 export default function Marker({
+  // key,
   posX, posY, icontype, text, textPosition, note
 }: {
+  // key: string,
   posX: number,
   posY: number,
   icontype: string,
@@ -61,13 +62,14 @@ export default function Marker({
     width: textBoxWidth,
     height: textBoxHeight,
     position: "relative",
-    backgroundColor: "rgba(255,80,100,0.2)",
+    backgroundColor: "rgba(80,255,80,0.2)",
     fontSize: 13
   };
   const positionStyle = _getPositionStyle(textPosition);
   const textBoxStyle: React.CSSProperties = {...baseStyle, ...positionStyle}
   return (
     <div
+      // key={key}
       style={{
         position: "absolute",
         top: 8 * posY,

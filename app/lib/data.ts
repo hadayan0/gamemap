@@ -1,4 +1,8 @@
 import { sql } from '@vercel/postgres';
+import {
+  Icontype,
+  Marker,
+} from '@/app/lib/definitions';
 
 interface IcontypeMap {
   [key: string]: Promise<Icontype>;
@@ -12,15 +16,9 @@ export async function getIcontypeFromCache(id: string) {
   return icontypeMap[id];
 }
 
-type Icontype = {
-  url: string;
-  alt: string;
-  width: number;
-  height: number;
-}
-
 export async function fetchIcontype(id: string): Promise<Icontype> {
   try {
+    // return { url: "", alt: "", width: 0, height: 0, };
     // console.log(`fetching... id=${id}`);
     const data = await sql`
       SELECT url, alt, width, height
@@ -29,7 +27,6 @@ export async function fetchIcontype(id: string): Promise<Icontype> {
     `;
     console.log(`fetched icontype id=${id}`);
     if (data.rowCount === 0) {
-      // return null;
       throw new Error('Icontype not found.');
     }
     return data.rows[0] as Icontype;
@@ -39,24 +36,16 @@ export async function fetchIcontype(id: string): Promise<Icontype> {
   }
 }
 
-type Marker = {
-  id: string;
-  icontype: string;
-  posx: number;
-  posy: number;
-  text: string;
-  note: string;
-  textposition: number;
-  position: 'east' | 'west' | 'south' | 'north';
-}
 export async function fetchMarkers(): Promise<Marker[]> {
   try {
+    // return [{ id: "", icontype: "", posx: 0, posy: 0, text: "", note: "", textposition: 0, position: "east" }];
     // console.log("fetching...");
     const data = await sql`
       SELECT id, icontype, posx, posy, text, note, textposition
       FROM marker
     `;
-    // console.log("fetched");
+    console.log("fetched");
+    console.log(data.rows);
     const markers = data.rows.map((marker) => ({
       ...marker,
       position: _getPositionString(marker.textposition),
